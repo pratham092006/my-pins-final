@@ -19,18 +19,18 @@
             --dark: #111;
             --light: #fff;
             --gray: #efefef;
-            --gray-light: #f9f9f9;
             --gray-dark: #767676;
             --overlay: rgba(0, 0, 0, 0.7);
         }
 
         body {
-            background-color: var(--gray-light);
+            background-color: #f9f9f9;
             color: var(--dark);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Header Styles */
         header {
             position: fixed;
             top: 0;
@@ -158,10 +158,10 @@
             background-color: #333;
         }
 
-        /* Main Content */
         main {
             margin-top: 100px;
             padding: 20px;
+            flex: 1;
         }
 
         .section-title {
@@ -212,38 +212,6 @@
             line-height: 1.4;
         }
 
-        .pin-actions {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .pin:hover .pin-actions {
-            opacity: 1;
-        }
-
-        .pin-action-btn {
-            background: none;
-            border: none;
-            color: var(--dark);
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .pin-action-btn:hover {
-            color: var(--primary);
-        }
-
         /* Modal Styles */
         .modal {
             position: fixed;
@@ -274,8 +242,6 @@
             overflow: hidden;
             transform: translateY(-50px);
             transition: transform 0.5s;
-            max-height: 90vh;
-            overflow-y: auto;
         }
 
         .modal.active .modal-content {
@@ -308,18 +274,12 @@
             font-weight: 600;
         }
 
-        .form-group input, 
-        .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 14px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
         }
 
         .submit-btn {
@@ -350,105 +310,70 @@
             cursor: pointer;
         }
 
-        /* Image Upload Styles */
-        .upload-container {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 30px;
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 15px;
             text-align: center;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            cursor: pointer;
+            font-size: 14px;
         }
 
-        .upload-container:hover {
+        /* Image upload styles */
+        .image-upload-container {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .image-upload-container:hover {
             border-color: var(--primary);
         }
 
-        .upload-icon {
+        .image-upload-container i {
             font-size: 48px;
             color: var(--gray-dark);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        .upload-text {
+        .image-upload-container p {
             color: var(--gray-dark);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        .upload-btn {
-            background-color: var(--primary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 24px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .upload-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .preview-container {
-            margin: 15px 0;
-            text-align: center;
-            display: none;
-        }
-
-        .preview-image {
+        .image-preview {
             max-width: 100%;
-            max-height: 300px;
+            max-height: 200px;
+            display: none;
+            margin: 0 auto 15px;
             border-radius: 8px;
-            display: block;
-            margin: 0 auto;
         }
 
-        /* Notification */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1001;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .notification.show {
-            opacity: 1;
-        }
-
-        /* Explore Page */
-        .explore-categories {
+        /* Explore page styles */
+        .categories {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
             margin-bottom: 30px;
         }
 
-        .category-btn {
-            padding: 10px 20px;
-            background: var(--gray);
-            border: none;
+        .category {
+            padding: 8px 16px;
+            background-color: var(--gray);
             border-radius: 24px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .category-btn.active, .category-btn:hover {
-            background: var(--dark);
+        .category:hover, .category.active {
+            background-color: var(--dark);
             color: var(--light);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .search-container {
                 flex: 1;
@@ -461,15 +386,10 @@
             .pins-container {
                 columns: 2;
             }
-            
-            nav {
-                margin-left: 15px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Header with Navigation -->
     <header>
         <div class="logo">
             <div class="logo-icon">
@@ -479,14 +399,13 @@
         </div>
         
         <nav>
-            <a href="#" class="nav-link" id="homeLink">Home</a>
-            <a href="#" class="nav-link active" id="exploreLink">Explore</a>
-            <a href="#" class="nav-link">Following</a>
+            <a href="#" class="nav-link active" data-page="home">Home</a>
+            <a href="#" class="nav-link" data-page="explore">Explore</a>
         </nav>
         
         <div class="search-container">
             <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search for ideas">
+            <input type="text" placeholder="Search for ideas" id="searchInput">
         </div>
         
         <div class="user-actions">
@@ -498,32 +417,38 @@
         </div>
     </header>
     
-    <!-- Main Content - Home Page -->
-    <main id="homePage">
-        <h1 class="section-title">Your Inspiration</h1>
+    <main>
+        <!-- Home Page Content -->
+        <div id="homePage" class="page-content">
+            <h1 class="section-title">Your Inspiration</h1>
+            
+            <div class="pins-container" id="pinsContainer">
+                <!-- Pins will be dynamically added here -->
+            </div>
+        </div>
         
-        <div class="pins-container" id="pinsContainer">
-            <!-- Pins will be dynamically added here -->
+        <!-- Explore Page Content -->
+        <div id="explorePage" class="page-content" style="display: none;">
+            <h1 class="section-title">Explore Ideas</h1>
+            
+            <div class="categories">
+                <div class="category active" data-category="all">All</div>
+                <div class="category" data-category="travel">Travel</div>
+                <div class="category" data-category="food">Food</div>
+                <div class="category" data-category="design">Design</div>
+                <div class="category" data-category="art">Art</div>
+                <div class="category" data-category="photography">Photography</div>
+            </div>
+            
+            <div class="pins-container" id="explorePinsContainer">
+                <!-- Explore pins will be dynamically added here -->
+            </div>
         </div>
     </main>
     
-    <!-- Explore Page (initially hidden) -->
-    <main id="explorePage" style="display: none;">
-        <h1 class="section-title">Explore Ideas</h1>
-        
-        <div class="explore-categories">
-            <button class="category-btn active" data-category="all">All</button>
-            <button class="category-btn" data-category="design">Design</button>
-            <button class="category-btn" data-category="food">Food</button>
-            <button class="category-btn" data-category="travel">Travel</button>
-            <button class="category-btn" data-category="art">Art</button>
-            <button class="category-btn" data-category="fashion">Fashion</button>
-        </div>
-        
-        <div class="pins-container" id="exploreContainer">
-            <!-- Explore pins will be dynamically added here -->
-        </div>
-    </main>
+    <footer>
+        Developed by Pratham
+    </footer>
     
     <!-- Login Modal -->
     <div class="modal" id="loginModal">
@@ -545,9 +470,6 @@
                     <button type="submit" class="submit-btn">Log in</button>
                 </form>
             </div>
-            <div class="modal-footer">
-                <p>Not on My Pins yet? <a href="#" id="signupLink">Sign up</a></p>
-            </div>
         </div>
     </div>
     
@@ -566,19 +488,24 @@
                     </div>
                     <div class="form-group">
                         <label for="pinDescription">Description</label>
-                        <textarea id="pinDescription" placeholder="Tell everyone what your pin is about"></textarea>
+                        <input type="text" id="pinDescription" placeholder="Tell everyone what your pin is about">
                     </div>
                     <div class="form-group">
-                        <label>Upload Image</label>
-                        <div class="upload-container" id="uploadContainer">
-                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                            <p class="upload-text">Drag & drop or click to upload</p>
-                            <button type="button" class="upload-btn" id="uploadBtn">Select Image</button>
-                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                        </div>
-                        <div class="preview-container" id="previewContainer">
-                            <img id="previewImage" class="preview-image" alt="Image preview">
-                        </div>
+                        <label for="pinCategory">Category</label>
+                        <select id="pinCategory" class="form-group input" style="width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                            <option value="travel">Travel</option>
+                            <option value="food">Food</option>
+                            <option value="design">Design</option>
+                            <option value="art">Art</option>
+                            <option value="photography">Photography</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="image-upload-container" id="imageUploadContainer">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload an image</p>
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        <img id="imagePreview" class="image-preview" alt="Preview">
                     </div>
                     <button type="submit" class="submit-btn">Create Pin</button>
                 </form>
@@ -586,11 +513,8 @@
         </div>
     </div>
     
-    <!-- Notification -->
-    <div class="notification" id="notification"></div>
-    
     <script>
-        // Sample pins data
+        // Sample pins data with categories
         const pinsData = [
             {
                 id: 1,
@@ -615,72 +539,30 @@
             },
             {
                 id: 4,
-                title: "Modern Home Exterior",
-                description: "Architectural design with clean lines",
-                imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "design"
+                title: "Abstract Painting",
+                description: "Colorful modern art piece",
+                imageUrl: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "art"
             },
             {
                 id: 5,
-                title: "Gourmet Cooking",
-                description: "Professional techniques for home chefs",
-                imageUrl: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "food"
+                title: "Portrait Photography",
+                description: "Professional portrait techniques",
+                imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "photography"
             },
             {
                 id: 6,
-                title: "Summer Fashion",
-                description: "Trendy outfits for the warm season",
-                imageUrl: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "fashion"
-            },
-            {
-                id: 7,
-                title: "Coffee Art",
-                description: "Creative latte designs to inspire your morning",
-                imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                title: "Italian Cuisine",
+                description: "Authentic pasta recipes",
+                imageUrl: "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 category: "food"
-            },
-            {
-                id: 8,
-                title: "Dream Kitchen",
-                description: "Functional and stylish kitchen designs",
-                imageUrl: "https://images.unsplash.com/photo-1556911220-ef412ae179a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "design"
-            },
-            {
-                id: 9,
-                title: "Street Art",
-                description: "Urban art transforming city landscapes",
-                imageUrl: "https://images.unsplash.com/photo-1516834474-48c0abc2a902?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "art"
-            },
-            {
-                id: 10,
-                title: "Beach Paradise",
-                description: "Tropical destinations for your next vacation",
-                imageUrl: "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "travel"
-            },
-            {
-                id: 11,
-                title: "Minimalist Wardrobe",
-                description: "Capsule collections for effortless style",
-                imageUrl: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "fashion"
-            },
-            {
-                id: 12,
-                title: "Abstract Painting",
-                description: "Colorful expressions of modern art",
-                imageUrl: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
-                category: "art"
             }
         ];
 
         // DOM elements
         const pinsContainer = document.getElementById('pinsContainer');
-        const exploreContainer = document.getElementById('exploreContainer');
+        const explorePinsContainer = document.getElementById('explorePinsContainer');
         const loginBtn = document.getElementById('loginBtn');
         const loginModal = document.getElementById('loginModal');
         const closeLoginModal = document.getElementById('closeLoginModal');
@@ -689,23 +571,18 @@
         const createModal = document.getElementById('createModal');
         const closeCreateModal = document.getElementById('closeCreateModal');
         const createPinForm = document.getElementById('createPinForm');
-        const searchInput = document.getElementById('searchInput');
-        const notification = document.getElementById('notification');
-        const signupLink = document.getElementById('signupLink');
         const homePage = document.getElementById('homePage');
         const explorePage = document.getElementById('explorePage');
-        const homeLink = document.getElementById('homeLink');
-        const exploreLink = document.getElementById('exploreLink');
-        const uploadBtn = document.getElementById('uploadBtn');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const categories = document.querySelectorAll('.category');
+        const searchInput = document.getElementById('searchInput');
+        const imageUploadContainer = document.getElementById('imageUploadContainer');
         const imageUpload = document.getElementById('imageUpload');
-        const uploadContainer = document.getElementById('uploadContainer');
-        const previewContainer = document.getElementById('previewContainer');
-        const previewImage = document.getElementById('previewImage');
-        const categoryButtons = document.querySelectorAll('.category-btn');
+        const imagePreview = document.getElementById('imagePreview');
 
         // Current user state
         let currentUser = null;
-        let selectedImage = null;
+        let uploadedImage = null;
 
         // Render pins function
         function renderPins(pins, container) {
@@ -719,132 +596,73 @@
                         <h3 class="pin-title">${pin.title}</h3>
                         <p class="pin-desc">${pin.description}</p>
                     </div>
-                    <div class="pin-actions">
-                        <button class="pin-action-btn save-btn">
-                            <i class="fas fa-thumbtack"></i> Save
-                        </button>
-                        <button class="pin-action-btn">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                    </div>
                 `;
                 container.appendChild(pinElement);
             });
+        }
+
+        // Filter pins by category
+        function filterPinsByCategory(category) {
+            if (category === 'all') {
+                renderPins(pinsData, explorePinsContainer);
+                return;
+            }
+            const filteredPins = pinsData.filter(pin => pin.category === category);
+            renderPins(filteredPins, explorePinsContainer);
+        }
+
+        // Search pins
+        function searchPins(query) {
+            const lowerQuery = query.toLowerCase();
+            const filteredPins = pinsData.filter(pin => 
+                pin.title.toLowerCase().includes(lowerQuery) || 
+                pin.description.toLowerCase().includes(lowerQuery)
+            );
             
-            // Add save event listeners
-            container.querySelectorAll('.save-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const pinTitle = this.closest('.pin').querySelector('.pin-title').textContent;
-                    showNotification(`Saved "${pinTitle}" to your boards`);
-                    this.innerHTML = '<i class="fas fa-check"></i> Saved';
-                    this.style.color = 'var(--primary)';
-                    this.disabled = true;
-                });
-            });
+            const currentPage = document.querySelector('.page-content:not([style*="display: none"])').id;
+            if (currentPage === 'homePage') {
+                renderPins(filteredPins, pinsContainer);
+            } else {
+                renderPins(filteredPins, explorePinsContainer);
+            }
         }
 
         // Initialize pins
         renderPins(pinsData, pinsContainer);
-        renderPins(pinsData, exploreContainer);
-
-        // Show notification function
-        function showNotification(message) {
-            notification.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+        renderPins(pinsData, explorePinsContainer);
 
         // Image upload functionality
-        uploadBtn.addEventListener('click', () => {
+        imageUploadContainer.addEventListener('click', () => {
             imageUpload.click();
         });
 
-        uploadContainer.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadContainer.style.borderColor = 'var(--primary)';
-            uploadContainer.style.backgroundColor = 'rgba(230, 0, 35, 0.05)';
-        });
-
-        uploadContainer.addEventListener('dragleave', () => {
-            uploadContainer.style.borderColor = '#ccc';
-            uploadContainer.style.backgroundColor = '';
-        });
-
-        uploadContainer.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadContainer.style.borderColor = '#ccc';
-            uploadContainer.style.backgroundColor = '';
-            
-            if (e.dataTransfer.files.length) {
-                handleImageUpload(e.dataTransfer.files[0]);
-            }
-        });
-
         imageUpload.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                handleImageUpload(e.target.files[0]);
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imagePreview.src = event.target.result;
+                    imagePreview.style.display = 'block';
+                    uploadedImage = event.target.result;
+                    
+                    // Hide upload icon and text
+                    const uploadIcon = imageUploadContainer.querySelector('i');
+                    const uploadText = imageUploadContainer.querySelector('p');
+                    if (uploadIcon) uploadIcon.style.display = 'none';
+                    if (uploadText) uploadText.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
             }
-        });
-
-        function handleImageUpload(file) {
-            if (!file.type.match('image.*')) {
-                showNotification('Please select an image file');
-                return;
-            }
-            
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                selectedImage = e.target.result;
-                previewImage.src = selectedImage;
-                previewContainer.style.display = 'block';
-            };
-            
-            reader.readAsDataURL(file);
-        }
-
-        // Page navigation
-        homeLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            homePage.style.display = 'block';
-            explorePage.style.display = 'none';
-            homeLink.classList.add('active');
-            exploreLink.classList.remove('active');
-        });
-
-        exploreLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            homePage.style.display = 'none';
-            explorePage.style.display = 'block';
-            exploreLink.classList.add('active');
-            homeLink.classList.remove('active');
-        });
-
-        // Category filtering for explore page
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Update active button
-                categoryButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                
-                const category = button.dataset.category;
-                let filteredPins;
-                
-                if (category === 'all') {
-                    filteredPins = pinsData;
-                } else {
-                    filteredPins = pinsData.filter(pin => pin.category === category);
-                }
-                
-                renderPins(filteredPins, exploreContainer);
-            });
         });
 
         // Modal functionality
         loginBtn.addEventListener('click', () => {
+            if (currentUser) {
+                // Log out if already logged in
+                currentUser = null;
+                loginBtn.textContent = "Log in";
+                return;
+            }
             loginModal.classList.add('active');
         });
 
@@ -854,7 +672,7 @@
 
         createBtn.addEventListener('click', () => {
             if (!currentUser) {
-                showNotification('Please log in to create a pin');
+                loginModal.classList.add('active');
                 return;
             }
             createModal.classList.add('active');
@@ -862,16 +680,16 @@
 
         closeCreateModal.addEventListener('click', () => {
             createModal.classList.remove('active');
-            // Reset form
             createPinForm.reset();
-            previewContainer.style.display = 'none';
-            selectedImage = null;
-        });
-
-        signupLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            loginModal.classList.remove('active');
-            showNotification("Sign up feature would open here");
+            imagePreview.src = '';
+            imagePreview.style.display = 'none';
+            uploadedImage = null;
+            
+            // Show upload icon and text again
+            const uploadIcon = imageUploadContainer.querySelector('i');
+            const uploadText = imageUploadContainer.querySelector('p');
+            if (uploadIcon) uploadIcon.style.display = 'block';
+            if (uploadText) uploadText.style.display = 'block';
         });
 
         // Close modal when clicking outside
@@ -882,9 +700,54 @@
             if (e.target === createModal) {
                 createModal.classList.remove('active');
                 createPinForm.reset();
-                previewContainer.style.display = 'none';
-                selectedImage = null;
+                imagePreview.src = '';
+                imagePreview.style.display = 'none';
+                uploadedImage = null;
+                
+                // Show upload icon and text again
+                const uploadIcon = imageUploadContainer.querySelector('i');
+                const uploadText = imageUploadContainer.querySelector('p');
+                if (uploadIcon) uploadIcon.style.display = 'block';
+                if (uploadText) uploadText.style.display = 'block';
             }
+        });
+
+        // Navigation between pages
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                
+                // Update active nav link
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show the selected page
+                if (page === 'home') {
+                    homePage.style.display = 'block';
+                    explorePage.style.display = 'none';
+                    renderPins(pinsData, pinsContainer);
+                } else if (page === 'explore') {
+                    homePage.style.display = 'none';
+                    explorePage.style.display = 'block';
+                    renderPins(pinsData, explorePinsContainer);
+                }
+            });
+        });
+
+        // Category filtering
+        categories.forEach(category => {
+            category.addEventListener('click', () => {
+                categories.forEach(cat => cat.classList.remove('active'));
+                category.classList.add('active');
+                const selectedCategory = category.getAttribute('data-category');
+                filterPinsByCategory(selectedCategory);
+            });
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            searchPins(e.target.value);
         });
 
         // Form submissions
@@ -892,96 +755,54 @@
             e.preventDefault();
             const email = document.getElementById('email').value;
             
-            // Simple validation
             if (email) {
                 currentUser = email;
-                showNotification(`Welcome back, ${email.split('@')[0]}!`);
+                loginBtn.textContent = "Log out";
                 loginModal.classList.remove('active');
                 loginForm.reset();
-                
-                // Change login button to logout
-                loginBtn.textContent = "Log out";
-                loginBtn.removeEventListener('click', loginHandler);
-                loginBtn.addEventListener('click', logoutHandler);
             }
         });
 
         createPinForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            if (!selectedImage) {
-                showNotification('Please upload an image');
-                return;
-            }
-            
             const title = document.getElementById('pinTitle').value;
             const description = document.getElementById('pinDescription').value;
+            const category = document.getElementById('pinCategory').value;
             
-            if (title) {
+            if (title && uploadedImage) {
                 // Create new pin object
                 const newPin = {
                     id: pinsData.length + 1,
                     title,
                     description,
-                    imageUrl: selectedImage,
-                    category: "user"
+                    imageUrl: uploadedImage,
+                    category
                 };
                 
                 // Add to the beginning of pins array
                 pinsData.unshift(newPin);
                 
-                // Re-render pins on home page
+                // Re-render pins on both pages
                 renderPins(pinsData, pinsContainer);
+                renderPins(pinsData, explorePinsContainer);
                 
                 // Close modal and reset form
                 createModal.classList.remove('active');
                 createPinForm.reset();
-                previewContainer.style.display = 'none';
-                selectedImage = null;
+                imagePreview.src = '';
+                imagePreview.style.display = 'none';
+                uploadedImage = null;
                 
-                showNotification("Pin created successfully!");
-                
-                // Switch to home page to see the new pin
-                homePage.style.display = 'block';
-                explorePage.style.display = 'none';
-                homeLink.classList.add('active');
-                exploreLink.classList.remove('active');
+                // Show upload icon and text again
+                const uploadIcon = imageUploadContainer.querySelector('i');
+                const uploadText = imageUploadContainer.querySelector('p');
+                if (uploadIcon) uploadIcon.style.display = 'block';
+                if (uploadText) uploadText.style.display = 'block';
+            } else if (!uploadedImage) {
+                alert('Please upload an image');
             }
         });
-
-        // Search functionality
-        searchInput.addEventListener('keyup', (e) => {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const currentContainer = homePage.style.display !== 'none' ? pinsContainer : exploreContainer;
-            
-            if (searchTerm === '') {
-                renderPins(pinsData, currentContainer);
-                return;
-            }
-            
-            const filteredPins = pinsData.filter(pin => 
-                pin.title.toLowerCase().includes(searchTerm) || 
-                pin.description.toLowerCase().includes(searchTerm)
-            );
-            
-            renderPins(filteredPins, currentContainer);
-        });
-
-        // Login/logout handlers
-        function loginHandler() {
-            loginModal.classList.add('active');
-        }
-
-        function logoutHandler() {
-            if (confirm("Are you sure you want to log out?")) {
-                currentUser = null;
-                loginBtn.textContent = "Log in";
-                loginBtn.removeEventListener('click', logoutHandler);
-                loginBtn.addEventListener('click', loginHandler);
-                showNotification("You've been logged out successfully.");
-            }
-        }
     </script>
 </body>
-</html> 
-
+</html>
