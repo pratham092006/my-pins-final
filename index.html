@@ -1,17 +1,987 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Pins - Pinterest Clone</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Pins - Pinterest Clone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e60023;
+            --primary-dark: #ad081b;
+            --dark: #111;
+            --light: #fff;
+            --gray: #efefef;
+            --gray-light: #f9f9f9;
+            --gray-dark: #767676;
+            --overlay: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            background-color: var(--gray-light);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            background-color: var(--light);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon i {
+            color: white;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            color: var(--dark);
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            margin-left: 30px;
+            flex: 1;
+        }
+
+        .nav-link {
+            padding: 10px 15px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            border-radius: 24px;
+            transition: all 0.3s;
+        }
+
+        .nav-link.active, .nav-link:hover {
+            background-color: var(--dark);
+            color: var(--light);
+        }
+
+        .search-container {
+            flex: 0 0 40%;
+            max-width: 600px;
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 24px;
+            border: none;
+            background-color: var(--gray);
+            font-size: 16px;
+            padding-left: 48px;
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-dark);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 16px;
+        }
+
+        .login-btn {
+            background-color: var(--primary);
+            color: var(--light);
+        }
+
+        .login-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .create-btn {
+            background-color: var(--dark);
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .create-btn:hover {
+            background-color: #333;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .section-title {
+            margin: 20px 0 30px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .pins-container {
+            columns: 5 240px;
+            column-gap: 16px;
+        }
+
+        .pin {
+            display: inline-block;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--light);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .pin:hover {
+            transform: translateY(-5px);
+        }
+
+        .pin-image {
+            width: 100%;
+            display: block;
+        }
+
+        .pin-info {
+            padding: 12px;
+        }
+
+        .pin-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .pin-desc {
+            color: var(--gray-dark);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .pin-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pin:hover .pin-actions {
+            opacity: 1;
+        }
+
+        .pin-action-btn {
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pin-action-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--light);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 16px;
+            overflow: hidden;
+            transform: translateY(-50px);
+            transition: transform 0.5s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--gray);
+            position: relative;
+        }
+
+        .modal-header h2 {
+            color: var(--dark);
+            font-size: 24px;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: var(--light);
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark);
+            cursor: pointer;
+        }
+
+        /* Image Upload Styles */
+        .upload-container {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--gray-dark);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--gray-dark);
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 24px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .preview-container {
+            margin: 15px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        /* Explore Page */
+        .explore-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: var(--gray);
+            border: none;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background: var(--dark);
+            color: var(--light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-container {
+                flex: 1;
+            }
+            
+            .create-btn span {
+                display: none;
+            }
+            
+            .pins-container {
+                columns: 2;
+            }
+            
+            nav {
+                margin-left: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-thumbtack"></i>
+            </div>
+            <div class="logo-text">My<span>Pins</span></div>
+        </div>
+        
+        <nav>
+            <a href="#" class="nav-link" id="homeLink">Home</a>
+            <a href="#" class="nav-link active" id="exploreLink">Explore</a>
+            <a href="#" class="nav-link">Following</a>
+        </nav>
+        
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search for ideas">
+        </div>
+        
+        <div class="user-actions">
+            <button class="btn create-btn" id="createBtn">
+                <i class="fas fa-plus"></i>
+                <span>Create</span>
+            </button>
+            <button class="btn login-btn" id="loginBtn">Log in</button>
+        </div>
+    </header>
+    
+    <!-- Main Content - Home Page -->
+    <main id="homePage">
+        <h1 class="section-title">Your Inspiration</h1>
+        
+        <div class="pins-container" id="pinsContainer">
+            <!-- Pins will be dynamically added here -->
+        </div>
+    </main>
+    
+    <!-- Explore Page (initially hidden) -->
+    <main id="explorePage" style="display: none;">
+        <h1 class="section-title">Explore Ideas</h1>
+        
+        <div class="explore-categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="design">Design</button>
+            <button class="category-btn" data-category="food">Food</button>
+            <button class="category-btn" data-category="travel">Travel</button>
+            <button class="category-btn" data-category="art">Art</button>
+            <button class="category-btn" data-category="fashion">Fashion</button>
+        </div>
+        
+        <div class="pins-container" id="exploreContainer">
+            <!-- Explore pins will be dynamically added here -->
+        </div>
+    </main>
+    
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeLoginModal">&times;</button>
+            <div class="modal-header">
+                <h2>Welcome to My Pins</h2>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="submit-btn">Log in</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <p>Not on My Pins yet? <a href="#" id="signupLink">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Pin Modal -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeCreateModal">&times;</button>
+            <div class="modal-header">
+                <h2>Create a New Pin</h2>
+            </div>
+            <div class="modal-body">
+                <form id="createPinForm">
+                    <div class="form-group">
+                        <label for="pinTitle">Pin Title</label>
+                        <input type="text" id="pinTitle" required placeholder="Add a title">
+                    </div>
+                    <div class="form-group">
+                        <label for="pinDescription">Description</label>
+                        <textarea id="pinDescription" placeholder="Tell everyone what your pin is about"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Image</label>
+                        <div class="upload-container" id="uploadContainer">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="upload-text">Drag & drop or click to upload</p>
+                            <button type="button" class="upload-btn" id="uploadBtn">Select Image</button>
+                            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="preview-container" id="previewContainer">
+                            <img id="previewImage" class="preview-image" alt="Image preview">
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Create Pin</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+    
+    <script>
+        // Sample pins data
+        const pinsData = [
+            {
+                id: 1,
+                title: "Modern Living Room",
+                description: "Contemporary design with minimalist approach",
+                imageUrl: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "design"
+            },
+            {
+                id: 2,
+                title: "Healthy Breakfast",
+                description: "Start your day with nutritious meals",
+                imageUrl: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "food"
+            },
+            {
+                id: 3,
+                title: "Mountain Escape",
+                description: "Breathtaking views for nature lovers",
+                imageUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "travel"
+            },
+            {
+                id: 4,
+                title: "Modern Home Exterior",
+                description: "Architectural design with clean lines",
+                imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "design"
+            },
+            {
+                id: 5,
+                title: "Gourmet Cooking",
+                description: "Professional techniques for home chefs",
+                imageUrl: "https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "food"
+            },
+            {
+                id: 6,
+                title: "Summer Fashion",
+                description: "Trendy outfits for the warm season",
+                imageUrl: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "fashion"
+            },
+            {
+                id: 7,
+                title: "Coffee Art",
+                description: "Creative latte designs to inspire your morning",
+                imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "food"
+            },
+            {
+                id: 8,
+                title: "Dream Kitchen",
+                description: "Functional and stylish kitchen designs",
+                imageUrl: "https://images.unsplash.com/photo-1556911220-ef412ae179a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "design"
+            },
+            {
+                id: 9,
+                title: "Street Art",
+                description: "Urban art transforming city landscapes",
+                imageUrl: "https://images.unsplash.com/photo-1516834474-48c0abc2a902?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "art"
+            },
+            {
+                id: 10,
+                title: "Beach Paradise",
+                description: "Tropical destinations for your next vacation",
+                imageUrl: "https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "travel"
+            },
+            {
+                id: 11,
+                title: "Minimalist Wardrobe",
+                description: "Capsule collections for effortless style",
+                imageUrl: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "fashion"
+            },
+            {
+                id: 12,
+                title: "Abstract Painting",
+                description: "Colorful expressions of modern art",
+                imageUrl: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+                category: "art"
+            }
+        ];
 
-  <!-- Main HTML content copied here -->
-  <!-- Truncated for brevity, user already has the full content -->
+        // DOM elements
+        const pinsContainer = document.getElementById('pinsContainer');
+        const exploreContainer = document.getElementById('exploreContainer');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const loginForm = document.getElementById('loginForm');
+        const createBtn = document.getElementById('createBtn');
+        const createModal = document.getElementById('createModal');
+        const closeCreateModal = document.getElementById('closeCreateModal');
+        const createPinForm = document.getElementById('createPinForm');
+        const searchInput = document.getElementById('searchInput');
+        const notification = document.getElementById('notification');
+        const signupLink = document.getElementById('signupLink');
+        const homePage = document.getElementById('homePage');
+        const explorePage = document.getElementById('explorePage');
+        const homeLink = document.getElementById('homeLink');
+        const exploreLink = document.getElementById('exploreLink');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadContainer = document.getElementById('uploadContainer');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+        const categoryButtons = document.querySelectorAll('.category-btn');
 
-  <script src="script.js"></script>
+        // Current user state
+        let currentUser = null;
+        let selectedImage = null;
+
+        // Render pins function
+        function renderPins(pins, container) {
+            container.innerHTML = '';
+            pins.forEach(pin => {
+                const pinElement = document.createElement('div');
+                pinElement.className = 'pin';
+                pinElement.innerHTML = `
+                    <img src="${pin.imageUrl}" alt="${pin.title}" class="pin-image">
+                    <div class="pin-info">
+                        <h3 class="pin-title">${pin.title}</h3>
+                        <p class="pin-desc">${pin.description}</p>
+                    </div>
+                    <div class="pin-actions">
+                        <button class="pin-action-btn save-btn">
+                            <i class="fas fa-thumbtack"></i> Save
+                        </button>
+                        <button class="pin-action-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(pinElement);
+            });
+            
+            // Add save event listeners
+            container.querySelectorAll('.save-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const pinTitle = this.closest('.pin').querySelector('.pin-title').textContent;
+                    showNotification(`Saved "${pinTitle}" to your boards`);
+                    this.innerHTML = '<i class="fas fa-check"></i> Saved';
+                    this.style.color = 'var(--primary)';
+                    this.disabled = true;
+                });
+            });
+        }
+
+        // Initialize pins
+        renderPins(pinsData, pinsContainer);
+        renderPins(pinsData, exploreContainer);
+
+        // Show notification function
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Image upload functionality
+        uploadBtn.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        uploadContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadContainer.style.borderColor = 'var(--primary)';
+            uploadContainer.style.backgroundColor = 'rgba(230, 0, 35, 0.05)';
+        });
+
+        uploadContainer.addEventListener('dragleave', () => {
+            uploadContainer.style.borderColor = '#ccc';
+            uploadContainer.style.backgroundColor = '';
+        });
+
+        uploadContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadContainer.style.borderColor = '#ccc';
+            uploadContainer.style.backgroundColor = '';
+            
+            if (e.dataTransfer.files.length) {
+                handleImageUpload(e.dataTransfer.files[0]);
+            }
+        });
+
+        imageUpload.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+
+        function handleImageUpload(file) {
+            if (!file.type.match('image.*')) {
+                showNotification('Please select an image file');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                selectedImage = e.target.result;
+                previewImage.src = selectedImage;
+                previewContainer.style.display = 'block';
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // Page navigation
+        homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            homePage.style.display = 'block';
+            explorePage.style.display = 'none';
+            homeLink.classList.add('active');
+            exploreLink.classList.remove('active');
+        });
+
+        exploreLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            homePage.style.display = 'none';
+            explorePage.style.display = 'block';
+            exploreLink.classList.add('active');
+            homeLink.classList.remove('active');
+        });
+
+        // Category filtering for explore page
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const category = button.dataset.category;
+                let filteredPins;
+                
+                if (category === 'all') {
+                    filteredPins = pinsData;
+                } else {
+                    filteredPins = pinsData.filter(pin => pin.category === category);
+                }
+                
+                renderPins(filteredPins, exploreContainer);
+            });
+        });
+
+        // Modal functionality
+        loginBtn.addEventListener('click', () => {
+            loginModal.classList.add('active');
+        });
+
+        closeLoginModal.addEventListener('click', () => {
+            loginModal.classList.remove('active');
+        });
+
+        createBtn.addEventListener('click', () => {
+            if (!currentUser) {
+                showNotification('Please log in to create a pin');
+                return;
+            }
+            createModal.classList.add('active');
+        });
+
+        closeCreateModal.addEventListener('click', () => {
+            createModal.classList.remove('active');
+            // Reset form
+            createPinForm.reset();
+            previewContainer.style.display = 'none';
+            selectedImage = null;
+        });
+
+        signupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.classList.remove('active');
+            showNotification("Sign up feature would open here");
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('active');
+            }
+            if (e.target === createModal) {
+                createModal.classList.remove('active');
+                createPinForm.reset();
+                previewContainer.style.display = 'none';
+                selectedImage = null;
+            }
+        });
+
+        // Form submissions
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            
+            // Simple validation
+            if (email) {
+                currentUser = email;
+                showNotification(`Welcome back, ${email.split('@')[0]}!`);
+                loginModal.classList.remove('active');
+                loginForm.reset();
+                
+                // Change login button to logout
+                loginBtn.textContent = "Log out";
+                loginBtn.removeEventListener('click', loginHandler);
+                loginBtn.addEventListener('click', logoutHandler);
+            }
+        });
+
+        createPinForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!selectedImage) {
+                showNotification('Please upload an image');
+                return;
+            }
+            
+            const title = document.getElementById('pinTitle').value;
+            const description = document.getElementById('pinDescription').value;
+            
+            if (title) {
+                // Create new pin object
+                const newPin = {
+                    id: pinsData.length + 1,
+                    title,
+                    description,
+                    imageUrl: selectedImage,
+                    category: "user"
+                };
+                
+                // Add to the beginning of pins array
+                pinsData.unshift(newPin);
+                
+                // Re-render pins on home page
+                renderPins(pinsData, pinsContainer);
+                
+                // Close modal and reset form
+                createModal.classList.remove('active');
+                createPinForm.reset();
+                previewContainer.style.display = 'none';
+                selectedImage = null;
+                
+                showNotification("Pin created successfully!");
+                
+                // Switch to home page to see the new pin
+                homePage.style.display = 'block';
+                explorePage.style.display = 'none';
+                homeLink.classList.add('active');
+                exploreLink.classList.remove('active');
+            }
+        });
+
+        // Search functionality
+        searchInput.addEventListener('keyup', (e) => {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const currentContainer = homePage.style.display !== 'none' ? pinsContainer : exploreContainer;
+            
+            if (searchTerm === '') {
+                renderPins(pinsData, currentContainer);
+                return;
+            }
+            
+            const filteredPins = pinsData.filter(pin => 
+                pin.title.toLowerCase().includes(searchTerm) || 
+                pin.description.toLowerCase().includes(searchTerm)
+            );
+            
+            renderPins(filteredPins, currentContainer);
+        });
+
+        // Login/logout handlers
+        function loginHandler() {
+            loginModal.classList.add('active');
+        }
+
+        function logoutHandler() {
+            if (confirm("Are you sure you want to log out?")) {
+                currentUser = null;
+                loginBtn.textContent = "Log in";
+                loginBtn.removeEventListener('click', logoutHandler);
+                loginBtn.addEventListener('click', loginHandler);
+                showNotification("You've been logged out successfully.");
+            }
+        }
+    </script>
 </body>
-</html>
+</html> 
+
